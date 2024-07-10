@@ -17,11 +17,11 @@ To try to overcome these limitations, this project focuses on the implementation
 ### Streetview Images Autoencoder
 The approach taken to encode the streetview images is to use a masked autoencoder but with a modified training phase and structure with the one described in [1]. In this implementation of the autoencoder both the encoder and the decoder have same dimensionality, and uses a ViT like structure. During training phase the model is fed with a portion of the patches, based on their semantics; during inference the input is the complete patched image.
 
-!(Encoder Structure)[https://github.com/dan-crdll/ground_aerial_project/blob/8cec5763aa712cde8d8b242464790a98534564b3/imgs/encoder.png]
+![Encoder Structure](imgs/encoder.png)
 
 The above encoder structure is formed by a flatten operation on patches, which are later linearly embedded. Finally the flattened and embedded patches go through a series of ViT-like encoders.
 
-!(Decoder Structure)[https://github.com/dan-crdll/ground_aerial_project/blob/8cec5763aa712cde8d8b242464790a98534564b3/imgs/decoder.png]
+![Decoder Structure](imgs/encoder.png)
 
 The decoder structure is the specular architecture of the encoder, it receives the encoded patches that goes through a series of ViT decoders, then they are unflattened to have the image patch original structure (removing the positional encodings).
 
