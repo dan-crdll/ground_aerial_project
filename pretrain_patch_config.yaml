@@ -1,0 +1,17 @@
+dataset:
+  ds_path: ./data
+  max_train: 2500
+  max_val: 500
+  patch_size: 16
+
+autoencoder:
+  embed_dim: 256
+  in_channels: 4
+  out_channels: 3
+  encoder_depth: 5
+  decoder_depth: 5
+  encoder_heads: 16
+  decoder_heads: 16
+  dropout: 0.1
+  lr: 1.0e-5
+  max_epochs: 100

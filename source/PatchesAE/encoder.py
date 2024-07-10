@@ -11,6 +11,7 @@ class Encoder(nn.Module):
         self.transformer_blocks = nn.ModuleList(
             [AttentionBlock(embed_dim, num_heads, dropout) for _ in range(depth)]
         )
+        self.out = nn.Tanh()
         
         self.apply(self.init_weights)
         
@@ -24,5 +25,5 @@ class Encoder(nn.Module):
         
         for b in self.transformer_blocks:
             embeddings = b(embeddings)
-        
-        return embeddings
+        encodings = self.out(embeddings)
+        return encodings

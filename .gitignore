@@ -6,3 +6,8 @@ models/
 notebooks/
 trained_models/
 *.ipynb
+*.pth
+lightning_logs/
+outputs/*
+*.log
+*.ds
