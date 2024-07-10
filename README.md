@@ -21,7 +21,7 @@ The approach taken to encode the streetview images is to use a masked autoencode
 
 The above encoder structure is formed by a flatten operation on patches, which are later linearly embedded. Finally the flattened and embedded patches go through a series of ViT-like encoders.
 
-![Decoder Structure](imgs/encoder.png)
+![Decoder Structure](imgs/decoder.png)
 
 The decoder structure is the specular architecture of the encoder, it receives the encoded patches that goes through a series of ViT decoders, then they are unflattened to have the image patch original structure (removing the positional encodings).
 
