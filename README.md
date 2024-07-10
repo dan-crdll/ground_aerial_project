@@ -17,7 +17,19 @@ To try to overcome these limitations, this project focuses on the implementation
 ### Streetview Images Autoencoder
 The approach taken to encode the streetview images is to use a masked autoencoder but with a modified training phase and structure with the one described in [1]. In this implementation of the autoencoder both the encoder and the decoder have same dimensionality, and uses a ViT like structure. During training phase the model is fed with a portion of the patches, based on their semantics; during inference the input is the complete patched image.
 
+!(Encoder Structure)[https://github.com/dan-crdll/ground_aerial_project/blob/8cec5763aa712cde8d8b242464790a98534564b3/imgs/encoder.png]
+
+The above encoder structure is formed by a flatten operation on patches, which are later linearly embedded. Finally the flattened and embedded patches go through a series of ViT-like encoders.
+
+!(Decoder Structure)[https://github.com/dan-crdll/ground_aerial_project/blob/8cec5763aa712cde8d8b242464790a98534564b3/imgs/decoder.png]
+
+The decoder structure is the specular architecture of the encoder, it receives the encoded patches that goes through a series of ViT decoders, then they are unflattened to have the image patch original structure (removing the positional encodings).
+
+Encoder and decoder are combined to create the autoencoder, after training only the encoder part is used to encode the streetview images.
+
+To pretrain the autoencoder it is sufficient to run `python pretrain_patch_autoencoder.py`, to change the hyperparameters and the training variables it is possible to modify `pretrain_patch_config.yaml` file.
+
 
 # Reference
-[1] Masked Autoencoders Are Scalable Vision Learners - K. He, et al. (https://arxiv.org/abs/2111.06377)[https://arxiv.org/abs/2111.06377]
+[1] Masked Autoencoders Are Scalable Vision Learners - K. He, et al. (https://arxiv.org/abs/2111.06377)
 
