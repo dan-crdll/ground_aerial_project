@@ -36,7 +36,7 @@ class StreetSatDataset(Dataset):
                 semantic = np.ones((street_map.shape[1], street_map.shape[2]))
                 positions = torch.tensor(np.sin(np.arange(semantic.size) + 1).reshape(semantic.shape) + np.cos(np.arange(semantic.size) + 1).reshape(semantic.shape)).unsqueeze(0)
                 street_map = torch.cat([street_map, positions], 0)
-                street_map, _ = self.patchify(street_map, 16)
+                street_map, _ = StreetSatDataset.patchify(street_map, 16)
 
                 with torch.no_grad():
                     street_map = self.enc_street(street_map.unsqueeze(0).to('cuda')).to('cpu').squeeze(0)
@@ -56,8 +56,6 @@ class StreetSatDataset(Dataset):
                     break
         del self.enc_street
         del enc 
-        del dec
-        del ae_street
         torch.cuda.empty_cache()
     
     def __getitem__(self, index):
@@ -66,7 +64,8 @@ class StreetSatDataset(Dataset):
     def __len__(self):
         return len(self.ds)
     
-    def patchify(self, img, patch_size):
+    @staticmethod
+    def patchify(img, patch_size):
         C, H, W = img.shape
         
         patches = torch.zeros((H // patch_size * W // patch_size, C, patch_size, patch_size))
