@@ -65,6 +65,7 @@ ground_aerial_project/
 ├── imgs /
 ├── source/
 │   ├── datasets/
+│   │   ├── street_map_ds.py
 │   │   └── patchified_dataset.py
 │   ├── PatchesAE/
 │   │   ├── attention.py
@@ -83,6 +84,24 @@ ground_aerial_project/
 ```
 
 To run the code it is suggested to create a virtual environment and install the dependencies listed in `requirements.txt`.
+
+To start pretraining the autoencoder for streetview images it is necessary to run:
+
+```
+python pretrain_patch_autoencoder.py
+```
+
+After that it is possible to pretrain the latent diffusion model:
+
+```
+python pretrain_ldm.py
+```
+
+Finally it is possible to give as input a streetview image to generate the satellite correspondent running:
+
+```
+python generate_satellite.py --streetview [image path]
+```
 
 # Reference
 [1] Masked Autoencoders Are Scalable Vision Learners - K. He, et al. (https://arxiv.org/abs/2111.06377)

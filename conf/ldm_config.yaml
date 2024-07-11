@@ -1,0 +1,12 @@
+dataset:
+  ds_path: ./data
+  model_path: ./streetview_encoder_state.pth
+  max_train: 1500
+  max_val: 500
+  bsz: 1
+
+ldm:
+  depth: 1
+  timesteps: 1000
+  max_epochs: 500
+  accumulate_grad: 64

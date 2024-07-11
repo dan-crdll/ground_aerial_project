@@ -212,7 +212,7 @@ class UNet(nn.Module):
 
 
 class DenoisingNetwork(L.LightningModule):
-    def __init__(self, timesteps, channels, noise_scheduler: PNDMScheduler, autoencoder: AutoencoderKL, guidance_scale=7.5, depth=10, dropout=0):
+    def __init__(self, timesteps, noise_scheduler: PNDMScheduler, autoencoder: AutoencoderKL, guidance_scale=7.5, depth=10):
         super(DenoisingNetwork, self).__init__()
         self.timesteps = timesteps
         
@@ -237,7 +237,6 @@ class DenoisingNetwork(L.LightningModule):
     def forward(self, x, conditioning, t):
         for u in self.unet:
             x = u(x, t, conditioning)
-        # x = self.attention(x)
         return x
     
     def training_step(self, batch, idx):

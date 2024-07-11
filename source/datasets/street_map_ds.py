@@ -7,7 +7,6 @@ import torch
 from source.PatchesAE.autoencoder import Autoencoder
 from source.PatchesAE.encoder import Encoder
 from source.PatchesAE.decoder import Decoder
-from diffusers import AutoencoderKL
 
 
 class StreetSatDataset(Dataset):
@@ -15,17 +14,11 @@ class StreetSatDataset(Dataset):
         super(StreetSatDataset, self).__init__()
         
         enc = Encoder(256, 4, 16, 5, 16, 0.3)
-        dec = Decoder(256, 3, 16, 5, 16, 0.3)
-        ae_street = Autoencoder.load_from_checkpoint(f"{model_path}/autoencoder_street_256.ckpt", encoder=enc, decoder=dec, lr=1e-5)
+        enc.load_state_dict(torch.load(model_path))
         
-        self.enc_street = ae_street.encoder
+        self.enc_street = enc
         
-        # url = 'https://huggingface.co/stabilityai/sd-vae-ft-mse-original/blob/main/vae-ft-mse-840000-ema-pruned.safetensors'
-        # self.ae_satellite = AutoencoderKL.from_single_file(url)
-        # self.ae_satellite.to('cuda')
-        
-        self.enc_street.eval()
-        # self.ae_satellite.eval()
+        self.enc_street.eval().to('cuda')
         print('Models loaded...')
         self.ds = []
         
@@ -51,10 +44,6 @@ class StreetSatDataset(Dataset):
                 satellite_map = cv.cvtColor(cv.imread(f"{ds_path}/CVPR_subset/{row['map']}"), cv.COLOR_BGR2RGB)
                 satellite_map = cv.resize(satellite_map, (512, 512))
                 satellite_map = (torch.tensor(satellite_map).permute(2, 0, 1) / 127.5) - 1
-                
-                # with torch.no_grad():
-                #     satellite_map = self.ae_satellite.encode(satellite_map.unsqueeze(0).to('cuda')).latent_dist.mean.squeeze(0).cpu()
-
 
                 self.ds.append({
                     'satellite': satellite_map,
@@ -65,7 +54,6 @@ class StreetSatDataset(Dataset):
                 
                 if maxn == 0:
                     break
-        # del self.ae_satellite
         del self.enc_street
         del enc 
         del dec
