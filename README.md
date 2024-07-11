@@ -38,14 +38,51 @@ GT on the left and result on the right.
 Latent Diffusion Model (LDM) is a generative architecture based on latent diffusion. In particular it is composed of two parts: PNDM Scheduler for the forward diffusion process; a UNet architecture for the backward diffusion process.
 
 The satellite images are encoded with a variational autoencoder, then noise is step by step added to these latents until they become Gaussian noise, then the UNet objective is:
-$$
-\| \mathcal N - f(\vec z_t, y) \|^2
-$$
+
+$$\| \mathcal N - f(\vec z_t, y) \|^2$$
+
 where $\mathcal N$ is the original total noise to add. The UNet denoising process is conditioned on streetview images.
 
 ![Latent diffusion model](imgs/ldm.png)
 
 During training the model is trained to learn the added noise at random timesteps, during inference the model is fed with noise and conditioning information, the model predict step by step the total added noise and then it is gradually removed with the scheduler.
+
+### Complete Architecture
+The complete architecture is formed by an VAE for encoding satellite images during training step, and decoding the denoised latents in inference; it is also composed by the above described latent diffusion model and the patch autoencoder for conditioning information encoding.
+
+![Complete architecture](imgs/complete_architecture.png)
+
+# Run the code
+After cloning the repository and downloading the dataset the structure will be:
+
+```
+ground_aerial_project/
+├── conf/
+│   ├── pretrain_patch_config.yaml
+│   └── ldm_config.yaml
+├── data  /
+│   └── CVPR_subset /
+├── imgs /
+├── source/
+│   ├── datasets/
+│   │   └── patchified_dataset.py
+│   ├── PatchesAE/
+│   │   ├── attention.py
+│   │   ├── autoencoder.py
+│   │   ├── decoder.py
+│   │   └── encoder.py
+│   └── ldm/
+│       └── ldm.py
+├── .gitignore
+├── LICENSE
+├── pretrain_patch_autoencoder.py
+├── pretrain_ldm.py
+├── generate_satellite.py
+├── requirements.txt
+└── README.md
+```
+
+To run the code it is suggested to create a virtual environment and install the dependencies listed in `requirements.txt`.
 
 # Reference
 [1] Masked Autoencoders Are Scalable Vision Learners - K. He, et al. (https://arxiv.org/abs/2111.06377)

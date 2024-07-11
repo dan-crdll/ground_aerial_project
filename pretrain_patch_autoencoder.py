@@ -14,7 +14,7 @@ from lightning.pytorch import seed_everything, Trainer
 seed_everything(0)
 
 
-@hydra.main(config_path='.', config_name='pretrain_patch_config', version_base=None)
+@hydra.main(config_path='./conf', config_name='pretrain_patch_config', version_base=None)
 def main(cfg):
     cfg = OmegaConf.to_object(cfg)
     ds_cfg = cfg['dataset']
