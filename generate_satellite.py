@@ -58,6 +58,7 @@ def main(streetview_path):
     scheduler = PNDMScheduler(beta_start=0.00085, beta_end=0.012, num_train_timesteps=cfg['timesteps'])    
     vae = AutoencoderKL.from_single_file('https://huggingface.co/stabilityai/sd-vae-ft-mse-original/blob/main/vae-ft-mse-840000-ema-pruned.safetensors')
     ldm = DenoisingNetwork(cfg['timesteps'], scheduler, vae)
+    ldm.load_state_dict(torch.load('./pretrained_ldm.pth'))
     ldm.eval()
     vae.eval()
 
