@@ -29,6 +29,23 @@ Encoder and decoder are combined to create the autoencoder, after training only 
 
 To pretrain the autoencoder it is sufficient to run `python pretrain_patch_autoencoder.py`, to change the hyperparameters and the training variables it is possible to modify `pretrain_patch_config.yaml` file.
 
+After training for 100 epochs the results are $0.015$ loss on validation set:
+
+![Final result](imgs/final_pretrain.png)
+GT on the left and result on the right.
+
+### Latent Diffusion Model
+Latent Diffusion Model (LDM) is a generative architecture based on latent diffusion. In particular it is composed of two parts: PNDM Scheduler for the forward diffusion process; a UNet architecture for the backward diffusion process.
+
+The satellite images are encoded with a variational autoencoder, then noise is step by step added to these latents until they become Gaussian noise, then the UNet objective is:
+$$
+\| \mathcal N - f(\vec z_t, y) \|^2
+$$
+where $\mathcal N$ is the original total noise to add. The UNet denoising process is conditioned on streetview images.
+
+![Latent diffusion model](imgs/ldm.png)
+
+During training the model is trained to learn the added noise at random timesteps, during inference the model is fed with noise and conditioning information, the model predict step by step the total added noise and then it is gradually removed with the scheduler.
 
 # Reference
 [1] Masked Autoencoders Are Scalable Vision Learners - K. He, et al. (https://arxiv.org/abs/2111.06377)
